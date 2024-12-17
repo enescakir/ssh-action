@@ -6,7 +6,7 @@ inputs:
     required: true
 
 runs:
-  # post: "enable-ssh.sh"
+  post: "enable-ssh.sh"
   using: "composite"
   steps:
     - name: Set ssh key

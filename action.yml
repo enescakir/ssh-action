@@ -1,0 +1,29 @@
+name: 'SSH to a runner'
+description: 'Greet someone'
+inputs:
+  public-ssh-key:
+    description: 'Public SSH key'
+    required: true
+
+runs:
+  # post: "enable-ssh.sh"
+  using: "composite"
+  steps:
+    - name: Set ssh key
+      shell: bash
+      run: |
+        sudo mkdir /home/runner/.ssh
+        echo "${{ inputs.public-ssh-key }}" | sudo tee /home/runner/.ssh/authorized_keys >/dev/null
+        sudo chown -R runner:runner /home/runner/.ssh
+        sudo chmod 700 /home/runner/.ssh
+        sudo chmod 600 /home/runner/.ssh/authorized_keys
+    
+    - name: IPv4 SSH Command
+      shell: bash
+      run: |
+        IPv4=$(curl -sL --ipv4 ifconfig.me)
+        echo "User: runner"
+        echo "IPv4: $IPv4"
+        echo "command: ssh runner@$IPv4"
+
+

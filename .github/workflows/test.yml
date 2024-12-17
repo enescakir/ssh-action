@@ -10,5 +10,4 @@ jobs:
         uses: enescakir/ssh-action@main
         with:
             public-ssh-key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMsY2oTeeKCK8pr339MREPlai6bvnlnCX3pvCCBKoJ7c enes@cakir.web.tr"
-
-      - run: sleep 1000000
+  

@@ -1,13 +1,15 @@
 name: 'SSH to a runner'
-description: 'Greet someone'
+description: 'Allow SSH to a runner'
 inputs:
   public-ssh-key:
     description: 'Public SSH key'
     required: true
-
+  timeout:
+    description: 'Timeout in seconds'
+    required: false
+    default: 600
+  
 runs:
-  main: "main.sh"
-  post: "post.sh"
   using: "composite"
   steps:
     - name: Set ssh key
@@ -27,3 +29,6 @@ runs:
         echo "IPv4: $IPv4"
         echo "command: ssh runner@$IPv4"
 
+    - name: Wait for timeout
+      shell: bash
+      run: sleep "${{ inputs.timeout }}"

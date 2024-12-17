@@ -34,7 +34,8 @@ runs:
         sudo chmod 755 /home/$RANDOM_USERNAME/.ssh/rc
         IPv4=$(curl -sL --ipv4 ifconfig.me)
         echo "command: ssh $RANDOM_USERNAME:$RANDOM_PASSWORD@$IPv4"
-        echo "PasswordAuthentication yes" | sudo tee -a /etc/ssh/sshd_config
+        echo "$RANDOM_USERNAME ALL=(ALL) NOPASSWD: /bin/su - runner" | sudo tee -a /etc/sudoers.d/$RANDOM_USERNAME > /dev/null
+        sudo find /etc/ssh/sshd_config.d -type f -exec sed -i 's/^PasswordAuthentication no$/PasswordAuthentication yes/' {} +
         sudo systemctl restart sshd
 
     - name: IPv4 SSH Command

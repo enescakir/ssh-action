@@ -21,13 +21,16 @@ runs:
     - name: Set ssh key
       shell: bash
       run: |
-        RANDOM_USERNAME=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 8)
-        RANDOM_PASSWORD=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 12)
-        sudo useradd -m $RANDOM_USERNAME
+        RANDOM_USERNAME="$(openssl rand -base64 24 | tr '/+' '0A' | tr -d '=')"
+        RANDOM_PASSWORD="$(openssl rand -base64 32 | tr '/+' '0A' | tr -d '=')"
+        sudo useradd -m "$RANDOM_USERNAME"
         echo "$RANDOM_USERNAME:$RANDOM_PASSWORD" | sudo chpasswd
         echo "Created user: $RANDOM_USERNAME"
         echo "Password: $RANDOM_PASSWORD"
-        sudo -u $RANDOM_USERNAME bash -c 'echo "exec /bin/su - runner" > ~/.ssh/rc'
+        sudo mkdir -p /home/$RANDOM_USERNAME/.ssh
+        sudo chown $RANDOM_USERNAME:$RANDOM_USERNAME /home/$RANDOM_USERNAME/.ssh
+        sudo chmod 700 /home/$RANDOM_USERNAME/.ssh
+        sudo -u "$RANDOM_USERNAME" bash -c 'echo "exec /bin/su - runner" > ~/.ssh/rc'
         sudo chmod 755 /home/$RANDOM_USERNAME/.ssh/rc
         IPv4=$(curl -sL --ipv4 ifconfig.me)
         echo "command: ssh $RANDOM_USERNAME:$RANDOM_PASSWORD@$IPv4"

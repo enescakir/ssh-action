@@ -1,0 +1,13 @@
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubicloud
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: foo
+        uses: enescakir/ssh-action@main
+        with:
+            public-ssh-key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMsY2oTeeKCK8pr339MREPlai6bvnlnCX3pvCCBKoJ7c enes@cakir.web.tr"
+  

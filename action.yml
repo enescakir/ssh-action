@@ -1,16 +1,18 @@
 name: 'SSH to a runner'
-description: 'Greet someone'
+description: 'Allow SSH to a runner'
 inputs:
   public-ssh-key:
     description: 'Public SSH key'
     required: true
-
+  wait-minutes:
+    description: 'Wait time in minutes'
+    required: false
+    default: 10
+  
 runs:
-  main: "main.sh"
-  post: "post.sh"
   using: "composite"
   steps:
-    - name: Set ssh key
+    - name: Set SSH key
       shell: bash
       run: |
         sudo mkdir /home/runner/.ssh
@@ -19,11 +21,14 @@ runs:
         sudo chmod 700 /home/runner/.ssh
         sudo chmod 600 /home/runner/.ssh/authorized_keys
 
-    - name: IPv4 SSH Command
+    - name: SSH Command
       shell: bash
       run: |
         IPv4=$(curl -sL --ipv4 ifconfig.me)
-        echo "User: runner"
-        echo "IPv4: $IPv4"
-        echo "command: ssh runner@$IPv4"
+        echo "User:    runner"
+        echo "IPv4:    $IPv4"
+        echo "Command: ssh runner@$IPv4"
 
+    - name: Wait for timeout
+      shell: bash
+      run: sleep $((${{ wait-minutes }} * 60))

@@ -31,4 +31,4 @@ runs:
 
     - name: Wait for timeout
       shell: bash
-      run: sleep $((${{ wait-minutes }} * 60))
+      run: sleep $((${{ inputs.wait-minutes }} * 60))

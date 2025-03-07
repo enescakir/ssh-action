@@ -2,15 +2,29 @@ const core = require('@actions/core');
 
 async function post() {
   try {
-    const waitMinutes = parseInt(core.getInput('wait-minutes') || '10');
+    const waitMinutes = parseInt(core.getInput('wait-minutes'));
 
-    // Calculate wait time in milliseconds
-    const waitTimeMs = waitMinutes * 60 * 1000;
-
-    console.log(`Waiting for ${waitMinutes} minutes to allow SSH access...`);
+    core.info(`Waiting for ${waitMinutes} minutes to allow SSH access...`);
     
-    // Sleep for the specified time
-    await new Promise(resolve => setTimeout(resolve, waitTimeMs));
+    // Create a promise that can be canceled
+    let waitTimeout;
+    const waitPromise = new Promise(resolve => {
+      waitTimeout = setTimeout(resolve, waitMinutes * 60 * 1000);
+    });
+
+    // Set up signal handlers for job cancellation
+    const signalHandler = async () => {
+      core.info('Job cancellation detected. Cancelling wait early...');
+      clearTimeout(waitTimeout); // Clear the timeout
+      process.exit(0); // Exit gracefully
+    };
+    
+    // Listen for termination signals
+    process.on('SIGINT', signalHandler);
+    process.on('SIGTERM', signalHandler);
+    
+    // Wait for the timeout or until a signal is received
+    await waitPromise;
   } catch (error) {
     core.setFailed(`Post action failed with error: ${error.message}`);
   }

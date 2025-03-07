@@ -30,11 +30,12 @@ async function run() {
     await exec.exec('curl', ['-sL', '--ipv4', 'ifconfig.me'], options);
     
     // Output connection information
-    console.log('\nSSH Connection Information:');
-    console.log(`User:    runner`);
-    console.log(`IPv4:    ${ipv4}`);
-    console.log(`Command: ssh runner@${ipv4}\n`);
-    core.info(`You can connect your runner with the following command:\nssh runner@${ipv4}`)
+    core.info('\nSSH Connection Information:');
+    core.info(`User:    runner`);
+    core.info(`IPv4:    ${ipv4}`);
+    core.info(`Command: ssh runner@${ipv4}\n`);
+
+    core.notice(`You can connect your runner with the following command:\nssh runner@${ipv4}`)
 
     // Set outputs that can be used by other workflow steps
     core.setOutput('ip', ipv4);

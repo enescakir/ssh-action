@@ -1,0 +1,28 @@
+{
+  "name": "ssh-action",
+  "version": "1.0.0",
+  "description": "Debug your GitHub Actions using SSH",
+  "scripts": {
+    "build:main": "ncc build -o dist/main --minify --no-cache src/main.js",
+    "build:post": "ncc build -o dist/post --minify --no-cache src/post.js",
+    "build": "npm run build:main && npm run build:post"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enescakir/ssh-action.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/enescakir/ssh-action/issues"
+  },
+  "homepage": "https://github.com/enescakir/ssh-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/exec": "^1.1.1"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.38.3"
+  }
+}

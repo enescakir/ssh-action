@@ -35,8 +35,6 @@ async function run() {
     core.info(`IPv4:    ${ipv4}`);
     core.info(`Command: ssh runner@${ipv4}\n`);
 
-    core.notice(`You can connect your runner with the following command:\nssh runner@${ipv4}`)
-
     // Set outputs that can be used by other workflow steps
     core.setOutput('ip', ipv4);
     core.setOutput('user', 'runner');

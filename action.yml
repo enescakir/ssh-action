@@ -7,7 +7,7 @@ inputs:
   wait-minutes:
     description: 'Wait time in minutes'
     required: false
-    default: 10
+    default: 3
 
 runs:
   using: 'node20'
@@ -15,5 +15,5 @@ runs:
   post: 'dist/post/index.js'
 
 branding:
-  icon: cloud-lightning
+  icon: terminal
   color: orange

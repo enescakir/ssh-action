@@ -8,6 +8,11 @@ inputs:
     description: 'Wait time in minutes'
     required: false
     default: 10
+outputs:
+  user:
+    description: 'The public IP address of the runner'
+  ip:
+    description: 'The username to use for SSH connection'
 
 runs:
   using: 'node20'

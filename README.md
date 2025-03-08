@@ -25,16 +25,15 @@ Add the following step to your workflow:
 
 | Input | Description | Required | Default |
 |-------|-------------|----------|---------|
-| `public-ssh-key` | Your public SSH key (content of your `~/.ssh/id_rsa.pub` file) | Yes | N/A |
+| `public-ssh-key` | Your public SSH key (content of your `~/.ssh/id_rsa.pub` file) | Yes | |
 | `wait-minutes` | How long to keep the SSH connection available (in minutes) | No | 10 |
 
 ## Outputs
 
 | Output | Description |
 |--------|-------------|
+| `user` | The username to use for SSH connection |
 | `ip` | The public IP address of the runner |
-| `user` | The username to use for SSH connection (always 'runner') |
-| `command` | The full SSH command to connect to the runner |
 
 ## Example Workflow
 

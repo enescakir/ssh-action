@@ -30,15 +30,19 @@ async function run() {
     await exec.exec('curl', ['-sL', '--ipv4', 'ifconfig.me'], options);
     
     // Output connection information
+    const user = 'runner';
     core.info('\nSSH Connection Information:');
-    core.info(`User:    runner`);
+    core.info(`User:    ${user}`);
     core.info(`IPv4:    ${ipv4}`);
-    core.info(`Command: ssh runner@${ipv4}\n`);
+    core.info(`Command:\nssh ${user}@${ipv4}\n`);
+
+    // Save states that can be used by post action
+    core.saveState('ssh_user', user)
+    core.saveState('ssh_ip', ipv4)
 
     // Set outputs that can be used by other workflow steps
+    core.setOutput('user', user);
     core.setOutput('ip', ipv4);
-    core.setOutput('user', 'runner');
-    core.setOutput('command', `ssh runner@${ipv4}`);
   } catch (error) {
     core.setFailed(`Action failed with error: ${error.message}`);
   }

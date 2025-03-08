@@ -6,6 +6,14 @@ async function post() {
 
     core.info(`Waiting for ${waitMinutes} minutes to allow SSH access...`);
 
+    const user = core.getState('ssh_user');
+    const ipv4 = core.getState('ssh_ip');
+
+    core.info('\nSSH Connection Information:');
+    core.info(`User:    ${user}`);
+    core.info(`IPv4:    ${ipv4}`);
+    core.info(`Command:\nssh ${user}@${ipv4}\n`);
+
     // Set up signal handlers for job cancellation
     const signalHandler = async () => {
       core.info('Job cancellation detected. Exiting...');

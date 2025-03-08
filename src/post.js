@@ -5,49 +5,24 @@ async function post() {
     const waitMinutes = parseInt(core.getInput('wait-minutes'));
 
     core.info(`Waiting for ${waitMinutes} minutes to allow SSH access...`);
-    
-    // Create a promise that can be canceled
-    // let waitTimeout;
-    // const waitPromise = new Promise(resolve => {
-    //   waitTimeout = setTimeout(resolve, waitMinutes * 60 * 1000);
-    // });
 
-    // // Set up signal handlers for job cancellation
-    // const signalHandler = async () => {
-    //   console.log("test")
-    //   core.info('Job cancellation detected. Cancelling wait early...');
-    //   clearTimeout(waitTimeout); // Clear the timeout
-    //   process.exit(0); // Exit gracefully
-    // };
+    // Set up signal handlers for job cancellation
+    const signalHandler = async () => {
+      core.info('Job cancellation detected. Cancelling wait early...');
+      process.exit(0); // Exit gracefully
+    };
     
     // Listen for termination signals
-    // process.on('SIGINT', signalHandler);
-    // process.on('SIGTERM', signalHandler);
+    process.on('SIGINT', signalHandler);
+    process.on('SIGTERM', signalHandler);
 
-    const events = [
-      // Standard process events
-      'beforeExit',
-      'exit',
-      'uncaughtException',
-      'unhandledRejection',
-      'SIGINT',
-      'SIGTERM',
-      'SIGUSR1',
-      'SIGUSR2',
-      'SIGHUP'
-    ];
-
-    // Register handlers for all events
-    events.forEach(event => {
-      process.on(event, (...args) => {
-        console.log(`[${(new Date()).toISOString()}] Received event: ${event}`, args);
-      });
-    });
-
-    await new Promise(resolve => setTimeout(resolve, waitMinutes * 60 * 1000));
-    // Wait for the timeout or until a signal is received
-    // await waitPromise;
-
+    // Sleep in intervals instead of in one long block.
+    // When it sleeps for a long block, it can't catch signals
+    const intervalSeconds = 5
+    for (let seconds = waitMinutes * 60; seconds > 0; ) {
+      await new Promise(resolve => setTimeout(resolve, intervalSeconds * 1000));
+      seconds -= intervalSeconds
+    }
   } catch (error) {
     core.setFailed(`Post action failed with error: ${error.message}`);
   }

@@ -8,7 +8,7 @@ async function post() {
 
     // Set up signal handlers for job cancellation
     const signalHandler = async () => {
-      core.info('Job cancellation detected. Cancelling wait early...');
+      core.info('Job cancellation detected. Exiting...');
       process.exit(0); // Exit gracefully
     };
     
@@ -16,13 +16,9 @@ async function post() {
     process.on('SIGINT', signalHandler);
     process.on('SIGTERM', signalHandler);
 
-    // Sleep in intervals instead of in one long block.
-    // When it sleeps for a long block, it can't catch signals
-    const intervalSeconds = 5
-    for (let seconds = waitMinutes * 60; seconds > 0; ) {
-      await new Promise(resolve => setTimeout(resolve, intervalSeconds * 1000));
-      seconds -= intervalSeconds
-    }
+    // Wait for the timeout or until a signal is received
+    await new Promise(resolve => setTimeout(resolve, waitMinutes * 60 * 1000));
+
   } catch (error) {
     core.setFailed(`Post action failed with error: ${error.message}`);
   }

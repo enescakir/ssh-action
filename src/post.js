@@ -23,14 +23,25 @@ async function post() {
     // Listen for termination signals
     // process.on('SIGINT', signalHandler);
     // process.on('SIGTERM', signalHandler);
-    process.on('SIGINT', () => {
-      console.log('Received SIGINT');
-    });
-    process.on('SIGTERM', () => {
-      console.log('Received SIGTERM');
-    });
-    process.on('exit', () => {
-      console.log('Received exit');
+
+    const events = [
+      // Standard process events
+      'beforeExit',
+      'exit',
+      'uncaughtException',
+      'unhandledRejection',
+      'SIGINT',
+      'SIGTERM',
+      'SIGUSR1',
+      'SIGUSR2',
+      'SIGHUP'
+    ];
+
+    // Register handlers for all events
+    events.forEach(event => {
+      process.on(event, (...args) => {
+        console.log(`[${(new Date()).toISOString()}] Received event: ${event}`, args);
+      });
     });
 
     await new Promise(resolve => setTimeout(resolve, waitMinutes * 60 * 1000));

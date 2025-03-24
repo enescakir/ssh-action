@@ -7,15 +7,14 @@ This action allows you to SSH into a GitHub Actions runner during workflow execu
 - Automatically sets up SSH access on the runner
 - Displays connection information (IP, username, and SSH command)
 - Configurable timeout for SSH access
-- Cleans up SSH configuration after workflow completion
 
 ## Usage
 
-Add the following step to your workflow:
+Add the following step to your workflow as the first step:
 
 ```yaml
 - name: Setup SSH access
-  uses: enescakir/ssh-action@v1
+  uses: ubicloud/ssh-runner@v1
   with:
     public-ssh-key: ${{ secrets.SSH_PUBLIC_KEY }}
     wait-minutes: 30  # Optional, default is 10 minutes
@@ -45,7 +44,7 @@ on:
 
 jobs:
   debug:
-    runs-on: ubuntu-latest
+    runs-on: ubicloud-standard-4
     steps:
       - uses: actions/checkout@v3
       
@@ -75,19 +74,3 @@ jobs:
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-```yaml
-name: ci
-
-jobs:
-  build:
-    runs-on: ubicloud-standard-2
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-    
-      - name: Enable ssh for runner
-        uses: ubicloud/ssh-debug@v1
-        with:
-          public-ssh-key: <YOUR_SSH_KEY>
-```

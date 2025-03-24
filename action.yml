@@ -1,11 +1,11 @@
 name: 'SSH to a runner'
-description: 'Allow SSH to a runner'
+description: 'This action allows you to SSH into a managed Ubicloud runner during workflow execution for debugging purposes.'
 inputs:
   public-ssh-key:
     description: 'Public SSH key'
     required: true
   wait-minutes:
-    description: 'Wait time in minutes'
+    description: 'How long to keep the runner available (in minutes)'
     required: false
     default: 10
 outputs:
@@ -13,13 +13,11 @@ outputs:
     description: 'The public IP address of the runner'
   ip:
     description: 'The username to use for SSH connection'
-
 runs:
   using: 'node20'
   main: 'dist/main/index.js'
   post: 'dist/post/index.js'
   post-if: '!cancelled()'
-
 branding:
   icon: terminal
   color: orange

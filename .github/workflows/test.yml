@@ -1,4 +1,6 @@
-on: [push]
+name: Test this workflow action
+on:
+  push:
 
 jobs:
   test:
@@ -6,8 +8,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - id: foo
+      - name: Generate public ssh key
+        id: generate-key
+        run: | 
+          $PUBLIC_KEY = "$(ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N "" -q -y)"
+          echo "public_key<<EOF" >> $GITHUB_OUTPUT
+          echo "$PUBLIC_KEY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          echo $PUBLIC_KEY >> ~/.ssh/authorized_keys
+
+      - name: Setup SSH access
+        id: ssh
         uses: enescakir/ssh-action@main
         with:
-            public-ssh-key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMsY2oTeeKCK8pr339MREPlai6bvnlnCX3pvCCBKoJ7c enes@cakir.web.tr"
-  
+          public-ssh-key: ${{ steps.generate-key.outputs.public_key }}
+          wait-minutes: 1
+
+      - name: Try to ssh
+        run: |
+          ssh ${{ steps.ssh.outputs.user }}@${{ steps.ssh.outputs.ip }} 'uptime'

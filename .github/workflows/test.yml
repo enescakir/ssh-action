@@ -11,7 +11,9 @@ jobs:
       - name: Generate public ssh key
         id: generate-key
         run: | 
-          $PUBLIC_KEY = "$(ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N "" -q -y)"
+          mkdir -p ~/.ssh/
+          ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N "" -q
+          PUBLIC_KEY="$(cat ~/.ssh/id_rsa.pub)"
           echo "public_key<<EOF" >> $GITHUB_OUTPUT
           echo "$PUBLIC_KEY" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
@@ -21,9 +23,9 @@ jobs:
         id: ssh
         uses: enescakir/ssh-action@main
         with:
-          public-ssh-key: ${{ steps.generate-key.outputs.public_key }}
+          public-ssh-key: "${{ steps.generate-key.outputs.public_key }}"
           wait-minutes: 1
 
       - name: Try to ssh
         run: |
-          ssh ${{ steps.ssh.outputs.user }}@${{ steps.ssh.outputs.ip }} 'uptime'
+          ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ${{ steps.ssh.outputs.user }}@${{ steps.ssh.outputs.ip }} 'uptime'

@@ -1,7 +1,7 @@
 {
-  "name": "ssh-action",
+  "name": "ssh-runner",
   "version": "1.0.0",
-  "description": "Debug your GitHub Actions using SSH",
+  "description": "Allows you to SSH into a managed Ubicloud runner during workflow execution for debugging purposes",
   "scripts": {
     "build:main": "ncc build -o dist/main --minify --no-cache src/main.js",
     "build:post": "ncc build -o dist/post --minify --no-cache src/post.js",
@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/enescakir/ssh-action.git"
+    "url": "git+https://github.com/ubicloud/ssh-runner.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/enescakir/ssh-action/issues"
+    "url": "https://github.com/ubicloud/ssh-runner/issues"
   },
-  "homepage": "https://github.com/enescakir/ssh-action#readme",
+  "homepage": "https://github.com/ubicloud/ssh-runner#readme",
   "dependencies": {
     "@actions/core": "^1.11.1",
     "@actions/exec": "^1.1.1"

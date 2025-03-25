@@ -1,4 +1,4 @@
-# ssh-runner for [Ubicloud Runners](https://www.ubicloud.com/use-cases/github-actions)
+# ssh-runner
 
 This action allows you to SSH into a [managed Ubicloud runner](https://www.ubicloud.com/use-cases/github-actions) during workflow execution for debugging purposes.
 

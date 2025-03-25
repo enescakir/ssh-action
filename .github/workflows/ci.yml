@@ -1,0 +1,21 @@
+name: CI
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubicloud
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: "package.json"
+
+      - name: Install node packages
+        run: npm ci
+
+      - name: Build
+        run: npm run build
